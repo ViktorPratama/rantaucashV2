@@ -25,13 +25,12 @@ const Login = () => {
     }
   }, [navigate]);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     try {
-      const response = await api.post('/users/login', {
-        email,
-        password,
+      const response = await api.get('/users/login', {
+        params: { email, password },
       });
+      console.log('Login successful:', response.data);
 
       const token = response.data.token;
       localStorage.setItem('token', token);
@@ -55,7 +54,7 @@ const Login = () => {
 
       alert('Login successful');
     } catch (err) {
-      console.error('Login Error:', err.response?.data || err.message);
+      console.error('Login failed:', err.response?.data || err.message);
       alert(err.response?.data?.error || 'Login failed!');
     }
   };
@@ -69,7 +68,7 @@ const Login = () => {
       <div className="login-section">
         <h2>Login</h2>
         <p>Selamat datang, silahkan masukkan data anda!</p>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={() => handleLogin()}>
           <input
             type="email"
             placeholder="Email"
