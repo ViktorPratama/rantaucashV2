@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Impor api dari services
+import api from '../services/api';
 import './Login.css';
 
 const Login = () => {
@@ -47,7 +47,6 @@ const Login = () => {
       const decodedToken = JSON.parse(atob(token.split('.')[1]));
       const userRole = decodedToken.role;
 
-      // Redirect based on role and prevent back navigation
       if (userRole === 'pemilik') {
         navigate('/admin', { replace: true });
       } else if (userRole === 'penghuni') {
@@ -57,7 +56,7 @@ const Login = () => {
       alert('Login successful');
     } catch (err) {
       console.error('Login Error:', err.response?.data || err.message);
-      alert('Login failed!');
+      alert(err.response?.data?.error || 'Login failed!');
     }
   };
 
