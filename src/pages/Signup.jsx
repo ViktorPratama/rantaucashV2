@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api'; // Impor api dari services
+import api from '../services/api';
 import './Signup.css';
 
 const Signup = () => {
@@ -12,19 +12,27 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
+    // Validasi password
+    if (password.length < 6) {
+      alert('Password must be at least 6 characters long.');
+      return;
+    }
+
     try {
+      // Kirim data registrasi ke backend
       await api.post('/users/register', {
         name,
         email,
         password,
-        role: 'penghuni', // Automatically set role to penghuni
+        role: 'penghuni', // Default role
       });
 
       alert('Registration successful!');
-      navigate('/'); // Redirect to login after successful registration
+      navigate('/'); // Redirect ke login
     } catch (err) {
       console.error('Registration Error:', err.response?.data || err.message);
-      alert('Registration failed!');
+      alert(err.response?.data?.error || 'Registration failed!');
     }
   };
 
